@@ -16,8 +16,8 @@ let
         pname = "bakkesmod-bin";
         version = "2.0.66";
         src = pkgs.fetchurl {
-          url = "https://github.com/bakkesmodorg/BakkesModInjectorCpp/releases/download/2.0.66/BakkesMod.exe";
-          sha256 = "1m5mlxy5fh2z2jk0lw49wbq712zfqqy9xx660pclfg258fzrfsvs";
+          url = "https://github.com/bakkesmodorg/BakkesModInjectorCpp/releases/download/2.0.69.2/BakkesMod.exe";
+          sha256 = "1pksrvihlgwjs22sf7c1jf5ls74aqp39z6xshrrxnd5k5h82nd2f";
         };
         dontUnpack = true;
         installPhase = ''
