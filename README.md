@@ -18,7 +18,11 @@ Add this flake to your `flake.nix` inputs:
 
 ```nix
 {
-  inputs.bakkesmod.url = "github:FelixSmtt/bakkes-nix";
+  inputs.bakkesmod = {
+    url = "github:FelixSmtt/bakkes-nix";
+    inputs.nixpkgs.follows = "nixpkgs";
+    inputs.home-manager.follows = "home-manager";
+  };
 
   outputs = { nixpkgs, home-manager, bakkesmod, ... }: {
     homeConfigurations."your-user" = home-manager.lib.homeManagerConfiguration {
@@ -38,11 +42,21 @@ Enable the module in your `home.nix`:
 { config, pkgs, ... }:
 
 {
-    programs.bakkesmod.enable = true;
+    programs.bakkesmod = {
+      enable = true;
+
+      launcher = {
+        enable = true; # Adds desktop entry for BakkesMod Launcher (User runs this after starting Rocket League)
+        prefixPath = "$HOME/Games/Heroic/Prefixes/default"; # Change this to your Rocket League prefix path if different.
+        winePath = "$HOME/.local/share/Steam/compatibilitytools.d/GE-Proton-latest/files/bin/wine"; # Change this to the proton path that Rocket League uses if different.
+      };
+
+      batchScript.enable = false; # Updates RocketLeague entrypoint script (Sadly this breaks Anti-Cheat when enabled.)
+    };
 
     # Optional: Heroic uses "Sugar" for the Epic Games version of Rocket League.
     # Change this if your internal ID is different (check ~/.config/heroic/GamesConfig/)
-    # programs.bakkesmod.heroicGameId = "Sugar";
+    # programs.bakkesmod.batchScript.heroicGameId = "Sugar";
 }
 ```
 
@@ -50,9 +64,15 @@ During first start in BakkesMod needs to download the actual BakkeMod files into
 
 ## How it Works
 
+### Batch Script
+
 The module creates a Nix Store Bundle containing the BakkesMod executable and a Windows Batch script.
 
 When you click "Play" in Heroic, it executes the .bat file. The script uses the STEAM_COMPAT_INSTALL_PATH environment variable provided by Heroic to cd into the correct game directory and launch both the injector and the game binary simultaneously and in the same Wine Session.
+
+### BakkesMod Launcher
+
+This runs BakkesMod in the same Wine prefix as Rocket League using a modified steam-run script to fix sandboxing issues.
 
 ## License
 
