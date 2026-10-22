@@ -24,7 +24,8 @@
 
         ./modules/default.nix
         ./modules/launcher.nix
-        ./modules/legacy.nix
+        ./modules/heroic.nix
+        ./modules/wrapper.nix
       ];
     };
 }

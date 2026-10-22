@@ -9,8 +9,9 @@
 
     {
       imports = [
-        self.homeModules.bakkesmod-legacy
         self.homeModules.bakkesmod-launcher
+        self.homeModules.bakkesmod-heroic
+        self.homeModules.bakkesmod-wrapper
       ];
 
       options.programs.bakkesmod = {

@@ -45,18 +45,18 @@ Enable the module in your `home.nix`:
     programs.bakkesmod = {
       enable = true;
 
-      launcher = {
-        enable = true; # Adds desktop entry for BakkesMod Launcher (User runs this after starting Rocket League)
+      settings = {
         prefixPath = "$HOME/Games/Heroic/Prefixes/default"; # Change this to your Rocket League prefix path if different.
         winePath = "$HOME/.local/share/Steam/compatibilitytools.d/GE-Proton-latest/files/bin/wine"; # Change this to the proton path that Rocket League uses if different.
       };
 
-      batchScript.enable = false; # Updates RocketLeague entrypoint script (Sadly this breaks Anti-Cheat when enabled.)
+      wrapper.enable = true; # Adds wrapper command to Heroic to launch Rocket League with BakkesMod automatically injected. (Enabled by default)
+      launcher.enable = false; # Adds desktop entry for BakkesMod Launcher (User runs this manually after starting Rocket League)
     };
 
     # Optional: Heroic uses "Sugar" for the Epic Games version of Rocket League.
     # Change this if your internal ID is different (check ~/.config/heroic/GamesConfig/)
-    # programs.bakkesmod.batchScript.heroicGameId = "Sugar";
+    # programs.bakkesmod.heroic.gameId = "Sugar";
 }
 ```
 
@@ -64,11 +64,9 @@ During first start in BakkesMod needs to download the actual BakkeMod files into
 
 ## How it Works
 
-### Batch Script
+### Wrapper Command
 
-The module creates a Nix Store Bundle containing the BakkesMod executable and a Windows Batch script.
-
-When you click "Play" in Heroic, it executes the .bat file. The script uses the STEAM_COMPAT_INSTALL_PATH environment variable provided by Heroic to cd into the correct game directory and launch both the injector and the game binary simultaneously and in the same Wine Session.
+This adds a wrapper command to Heroic that launches Rocket League with BakkesMod automatically injected. It uses the Heroic "Wrapper Command" feature to run a custom script that detects if Rocket League was started without Easy Anti-Cheat (EAC) and injects BakkesMod accordingly. The wrapper command is automatically added to Heroic when the option is not disabled.
 
 ### BakkesMod Launcher
 
